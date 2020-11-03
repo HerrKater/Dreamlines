@@ -1,0 +1,12 @@
+The application should consist of two parts:
+•	Backend: RESTful API written in .NET core 
+•	Frontend: SPA written in Angular 4 (or newer)
+A set of data is attached to the e-mail, containing the list of Bookings made by an online Cruise company. The application should show the Bookings made in the first quarter of 2016.  Please create a database and use Entity Framework to fetch the data from the database. 
+
+The Frontend should query the API for the Bookings in the given range. Once it gets the data, it should present  a list of Sales Units, showing the name and the total price of their related Bookings. If the user clicks on any Sales Unit, the list of related Bookings should be shown, showing Booking Id, Ship Name and Price.
+
+Important: please do the best implementation you can, how the application is implemented is as important as fulfilling the functional requirements. Please use a Code First approach and seed the data to the Database.
+
+Optional: implement a Type-ahead search that will accept either Booking Ids or Ship Names. The implementation should query the backend for searching (no front end searching).
+
+*All prices should show the correct Currency (which is stored in the Sales Unit).

@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <Description>Dreamlines.Presentation.Api</Description>
+    <Copyright>Dreamlines.Presentation.Api</Copyright>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>Dreamlines.Presentation.Api</AssemblyName>
+    <PackageId>Dreamlines.Presentation.Api</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="TrialTaskData.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.5.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TrialTaskData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dreamlines.ApplicationServices\Dreamlines.ApplicationServices.csproj" />
+    <ProjectReference Include="..\Dreamlines.Domain.InfrastructureInterfaces\Dreamlines.Domain.InfrastructureInterfaces.csproj" />
+    <ProjectReference Include="..\Dreamlines.Domain.Model\Dreamlines.Domain.csproj" />
+    <ProjectReference Include="..\Dreamlines.Infrastructure.Repositories\Dreamlines.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

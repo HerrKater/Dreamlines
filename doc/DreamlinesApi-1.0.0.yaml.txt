@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  description: |
+    This is prototype of the Dreamlines Bookings API
+    The api allows access the bookings and their related SalesUnits.
+  version: "1.0.0"
+  title: Dreamlines Bookings Api
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/KiscicaSandbox/DreamlinesApi/1.0.0
+  - url: 'https://petstore.swagger.io/v2'
+tags:
+  - name: booking
+    description: Operations related to Booking entity.
+  - name: salesunit
+    description: Operations related to Sales Unit entity.
+paths:
+  /booking/findBySalesUnitId/{salesUnitId}:
+    get:
+      tags:
+        - booking
+      summary: Returns all the bookings that belong to a salesunit with t
+      description: TODO
+      operationId: findBySalesUnitId
+      parameters:
+        - name: salesUnitId
+          in: path
+          description: ID of the salesUnit
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingSummary'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingSummary'
+        '400':
+          description: Invalid salesunit id
+  '/salesunit/{salesunitId}':
+    get:
+      tags:
+        - salesunit
+      summary: Finds a salesunit by ID
+      description: Returns a single salesunit
+      operationId: getSalesunitById
+      parameters:
+        - name: salesunitId
+          in: path
+          description: ID of salesunit to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesUnit'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SalesUnit'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Booking not found
+  /salesunit/search:
+    get:
+      tags:
+        - salesunit
+      summary: Lists the salesunits 
+      description: Returns a list of Sales Units, showing the name and the total price of their related Bookings. Results can be filtered by bookingIds or ship names.
+      operationId: salesunitsearch
+      parameters:
+        - in: query
+          name: searchTerm
+          schema:
+            type: string
+            description: Autocomplete search term that accepts either Booking Ids or Ship Names
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            description: The numbers of items to return
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesUnitSummary'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesUnitSummary'
+components:
+  schemas:
+  
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        shipId:
+          type: integer
+          format: int32
+        bookingDate:
+          type: string
+          format: date-time
+        price:
+          type: integer
+          format: int32
+      xml:
+        name: Booking
+    BookingSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        shipId:
+          type: integer
+          format: int32
+        shipName:
+          type: string
+        bookingDate:
+          type: string
+          format: date-time
+        price:
+          type: integer
+          format: int32
+      xml:
+        name: BookingSummary
+    Ship:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        salesUnitId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          format: date-time
+        bookings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Booking'
+      xml:
+        name: Ship
+    SalesUnit:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        country:
+          type: string
+        currency:
+          type: string
+        ships:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ship'
+      xml:
+        name: SalesUnit
+    SalesUnitSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        country:
+          type: string
+        currency:
+          type: string
+        bookingPriceSum:
+          type: integer
+          format : int32
+      xml:
+        name: SalesUnitSummary

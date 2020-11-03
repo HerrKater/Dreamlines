@@ -1,0 +1,128 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+@section Scripts{
+	<script>
+		$(document).ready(function() {
+			var table = $('#mainTable').DataTable({
+				"columns": [
+					{
+						"class": 'details-control',
+						"orderable": false,
+						"data": null,
+						"defaultContent": ''
+					},
+					{
+						data: "name",
+						orderable: false,
+					},
+					{
+						data: "country",
+						orderable: false,
+					},
+					{
+						data: "currency",
+						orderable: false,
+					},
+					{
+						data: "bookingPriceSum",
+						orderable: false,
+					}
+				],
+				"processing": true,
+				"serverSide": true,
+				"paging" : false,
+				"ajax": function (data, callback, settings) {
+					$.ajax({
+						headers: { "Accept": "application/json" },
+						type: 'GET',
+						data : {
+							searchTerm:data.search.value,
+						},
+						dataSrc: "data",
+						url: "https://localhost:5002/DreamlinesApi/1.0.0/salesunit/search",
+						crossDomain: true,
+						success: function (data, textStatus, request) {
+							var dummy = {};
+							dummy.data = data;
+							callback(dummy);
+						}
+					});
+				}
+
+			});
+
+			$('#mainTable tbody').on('click', 'td.details-control', function () {
+				var tr = $(this).closest('tr');
+				var row = table.row(tr);
+
+				if (row.child.isShown()) {
+					row.child.hide();
+					tr.removeClass('shown');
+				}
+				else {
+					row.child(loadBookings(row.data())).show();
+					tr.addClass('shown');
+				}
+			});
+		});
+
+
+		function loadBookings(rowData) {
+			var div = $('<div/>')
+				.addClass('loading')
+				.text('Loading...');
+
+			$.ajax({
+				url: "https://localhost:5002/DreamlinesApi/1.0.0/booking/FindBySalesUnitId/" + rowData.id,
+				type: 'GET',
+				dataType: 'json',
+				success: function (data) {
+					var html = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+					html +='<tr><td>Booking ID</td><td>Ship Name</td><td>Booking date</td><td>Price</td></tr>'
+					for (var i = 0; i < data.length; i++) {
+						html += '<tr>' +
+							'<td>' + data[i].id + '</td>' +
+							'<td>' + data[i].shipName + '</td>' +
+							'<td>' + data[i].bookingDate + '</td>' +
+							'<td>' + data[i].price + '</td>' +
+							'</tr>';
+					}
+					html += '</table>';
+					div.html(html)
+						.removeClass('loading');
+					console.debug(html);
+					
+				}
+			});
+
+			return div;
+		}
+	</script>
+}
+<style>
+	td.details-control {
+		background: url('https://raw.githubusercontent.com/DataTables/DataTables/1.10.7/examples/resources/details_open.png') no-repeat center center;
+		cursor: pointer;
+	}
+
+	tr.shown td.details-control {
+		background: url('https://raw.githubusercontent.com/DataTables/DataTables/1.10.7/examples/resources/details_close.png') no-repeat center center;
+	}
+</style>
+
+<div class="text-center">
+	<h1 class="display-4">Sales unit list</h1>
+	<table id="mainTable" class="display" style="width:100%">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Country</th>
+				<th>Currency</th>
+				<th>BookingPriceSum</th>
+			</tr>
+		</thead>
+	</table>
+</div>
